@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo/models/category.dart';
 import 'package:todo/screens/home_screen.dart';
+import 'package:todo/services/category_service.dart';
 
 class CategoresScreen extends StatefulWidget {
   const CategoresScreen({Key? key}) : super(key: key);
@@ -9,6 +11,10 @@ class CategoresScreen extends StatefulWidget {
 }
 
 class _CategoresScreenState extends State<CategoresScreen> {
+  var _categoryNameController = TextEditingController();
+  var _categoryDescriptionController = TextEditingController();
+  var _category = Category();
+  var _categoryService = CategoryService();
   _showFormDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -23,19 +29,29 @@ class _CategoresScreenState extends State<CategoresScreen> {
                   onPressed: (() {
                     Navigator.pop(context);
                   }),
-                  child: Text("Cancel")),
-              TextButton(onPressed: (() {}), child: Text("Save")),
+                  child: const Text("Cancel")),
+              TextButton(
+                  onPressed: (() {
+                    // print("Category : ${_categoryNameController.text}");
+                    // print("Category : ${_categoryDescriptionController.text}");
+                    _category.name = _categoryNameController.text;
+                    _category.description = _categoryDescriptionController.text;
+                    _categoryService.saveCategory(_category);
+                  }),
+                  child: const Text("Save")),
             ],
-            title: Text("Categories Form"),
+            title: const Text("Categories Form"),
             content: SingleChildScrollView(
               child: Column(
                 children: [
                   TextField(
-                    decoration: InputDecoration(
+                    controller: _categoryNameController,
+                    decoration: const InputDecoration(
                         hintText: "write a category ", labelText: "Category"),
                   ),
                   TextField(
-                    decoration: InputDecoration(
+                    controller: _categoryDescriptionController,
+                    decoration: const InputDecoration(
                         hintText: "write a Description ",
                         labelText: "Description"),
                   ),
